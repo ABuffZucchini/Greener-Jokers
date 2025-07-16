@@ -5,6 +5,10 @@ A Balatro mod I've been working on for a little over a month! Contains 50 unique
 Greener Jokers is designed with a Vanilla+ mindset, meaning there are no new mechanics such as Enhancements or Seals, so it should be able to fit cleanly into any other assortment of mods you're playing with! If there are any issues, reach out to me on Discord @abuffzucchini
 
 Additional Credits:
+
 Art: DanTKO, dewdrop, gooseberry, NoahCrawfish, PPNyan, the_orang_man, Tobyaaa, Worldwaker2
+
 Concepts: gooseberry, NoahCrawfish, Tobyaaa, Worldwaker2, Xolimono
+
 Playtesting: B1ackZer0, gooseberry, NoahCrawfish, the_orang_man, Tobyaaa, Worldwaker2
+
