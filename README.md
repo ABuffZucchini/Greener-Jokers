@@ -12,3 +12,5 @@ Concepts: gooseberry, NoahCrawfish, Tobyaaa, Worldwaker2, Xolimono
 
 Playtesting: B1ackZer0, gooseberry, NoahCrawfish, the_orang_man, Tobyaaa, Worldwaker2
 
+Code Help: Astra, Aurora Aquir, BakersDozenBagels, N', nh6574, Somethingcom515, sunsetquasar, Vitellary
+
