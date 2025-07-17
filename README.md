@@ -14,6 +14,6 @@ Concepts: gooseberry, NoahCrawfish, Tobyaaa, Worldwaker2, Xolimono
 
 Playtesting: B1ackZer0, gooseberry, NoahCrawfish, the_orang_man, Tobyaaa, Worldwaker2
 
-Code Help: Astra, Aurora Aquir, BakersDozenBagels, N', nh6574, Somethingcom515, sunsetquasar, Vitellary
+Code Help: Astra, Aurora Aquir, BakersDozenBagels, N', nh6574, NoahCrawfish, Somethingcom515, sunsetquasar, Vitellary
 
 <img width="1920" height="1080" alt="Greener Jokers Thumbnail" src="https://github.com/user-attachments/assets/c2e14fed-e54e-4e32-9c84-4d22e8f1b907" />
