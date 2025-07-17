@@ -2120,7 +2120,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { chips = 40, mult = 5, odds = 2 } },
+	config = { extra = { chips = 40, mult = 6, odds = 2 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.mult } }
 	end,
@@ -2906,7 +2906,7 @@ SMODS.Joker {
 		name = 'The Fountain',
 		text = {
 			'If {C:attention}Blind{} is selected',
-			'with more than {C:money}$#1#{},',
+			'with at least {C:money}$#1#{},',
 			'create a {C:dark_edition}Negative{} joker',
 			'and set money to {C:money}$0{}',
 			'{C:green,s:0.8}Art by DanTKO{}'
