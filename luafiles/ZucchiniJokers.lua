@@ -7,6 +7,10 @@ SMODS.Atlas {
 }
 
 
+--for zucchini legendary
+SMODS.optional_features.post_trigger = true
+SMODS.get_optional_features()
+
 -- nonsense line i dont care about that jokerguy told me to add thank you jokerguy! (talisman compatibility)
 -- everything should be talisman compatible! i dont usually play with talisman though so idk the only thing it seemed like i needed to fix was Peninsula
 to_big = to_big or function(x) return x end
@@ -39,7 +43,7 @@ SMODS.Joker {
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -48,8 +52,6 @@ SMODS.Joker {
 	cost = 3,
 	-- The functioning part of the joker, looks at context to decide what step of scoring the game is on, and then gives a 'return' value if something activates.
 	calculate = function(self, card, context)
-		-- Tests if context.joker_main == true.
-		-- joker_main is a SMODS specific thing, and is where the effects of jokers that just give +stuff in the joker area area triggered, like Joker giving +Mult, Cavendish giving XMult, and Bull giving +Chips.
 		if context.joker_main then
 			-- give chips
 			return {
@@ -92,7 +94,7 @@ SMODS.Joker {
 	end,
 
 	rarity = 3,
-	
+
 
 	atlas = 'ZucchinisVariousJokers',
 
@@ -147,8 +149,8 @@ SMODS.Joker {
 		return { vars = { card.ability.extra.chips, card.ability.extra.chip_gain } }
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
-	rarity = 1,
-	
+	rarity = 2,
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -208,7 +210,7 @@ SMODS.Joker {
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -273,7 +275,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -314,7 +316,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -387,7 +389,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 
 	atlas = 'ZucchinisVariousJokers',
 
@@ -470,7 +472,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -511,13 +513,14 @@ SMODS.Joker {
 		name = 'Honey Pot',
 		text = {
 			'This Joker gains {C:mult}+#2#{} Mult',
-			'when a {C:attention}Gold{} card gives money',
+			'when a {C:attention}Gold{} card is held in hand',
+			'at end of round',
 			'{C:inactive}(Currently {C:mult}+#1# {C:inactive}Mult){}',
 			'{C:green,s:0.8}Art by dewdrop{}'
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -525,7 +528,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { mult = 0, mult_gain = 4 } },
+	config = { extra = { mult = 0, mult_gain = 3 } },
 
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_gold
@@ -544,7 +547,7 @@ SMODS.Joker {
 			end
 		end
 	end,
-	]]--
+	]] --
 	calculate = function(self, card, context)
 		if context.joker_main then
 			return {
@@ -583,7 +586,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -639,7 +642,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -656,19 +659,21 @@ SMODS.Joker {
 
 	calculate = function(self, card, context)
 		if context.playing_card_added then
-			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
-			-- one day ill understand what the dollar buffer does but whatever it does it made this stop looking wonky
-			return {
-				dollars = card.ability.extra.dollars,
-				func = function()
-					G.E_MANAGER:add_event(Event({
-						func = function()
-							G.GAME.dollar_buffer = 0
-							return true
-						end
-					}))
-				end
-			}
+			for i = 1, #context.cards do
+				G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+				-- one day ill understand what the dollar buffer does but whatever it does it made this stop looking wonky
+				return {
+					dollars = card.ability.extra.dollars,
+					func = function()
+						G.E_MANAGER:add_event(Event({
+							func = function()
+								G.GAME.dollar_buffer = 0
+								return true
+							end
+						}))
+					end
+				}
+			end
 		end
 	end
 }
@@ -705,7 +710,7 @@ SMODS.Joker {
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -777,14 +782,14 @@ SMODS.Joker {
 		}
 	},
 	-- put all variables in here
-	config = { extra = { mult = 0, mult_gain = 4 } },
+	config = { extra = { mult = 0, mult_gain = 3 } },
 
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain } }
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -826,8 +831,13 @@ SMODS.Joker {
 			}
 		end
 		if context.before and context.cardarea == G.jokers and not context.blueprint then
+			-- extra code to work with the challenge dizzy diving
+
 			for i = 1, #context.scoring_hand do
 				if context.scoring_hand[i].debuff then
+					if G.GAME.modifiers.znm_evilreef then
+						ease_dollars(-G.GAME.dollars, true)
+					end
 					card.ability.extra.mult = card.ability.extra.mult + card.ability.extra.mult_gain
 					return {
 						message = localize('k_upgrade_ex'),
@@ -863,7 +873,7 @@ SMODS.Joker {
 	end,
 	-- Sets rarity. 1 common, 2 uncommon, 3 rare, 4 legendary.
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -913,7 +923,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -993,7 +1003,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1060,7 +1070,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1116,7 +1126,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1141,7 +1151,7 @@ SMODS.Joker {
 	end
 }
 
--- used for sackboy and fire eater for some weird functionality, thanks somethingcom515!
+-- used for sackboy for some weird functionality, thanks somethingcom515!
 local smodsoldcalccontext = SMODS.calculate_context
 function SMODS.calculate_context(context, return_table)
 	local g = smodsoldcalccontext(context, return_table)
@@ -1228,7 +1238,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1264,7 +1274,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1320,7 +1330,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1347,7 +1357,7 @@ SMODS.Joker {
 			end
 			if znm_crazy8bool then
 				for i = 1, #context.scoring_hand do
-					if context.scoring_hand[i] and not context.scoring_hand[i].m_wild then
+					if not SMODS.has_enhancement(context.scoring_hand[i], 'm_wild') then
 						znm_crazy8wildlist[#znm_crazy8wildlist + 1] =
 							context.scoring_hand[i]
 					end
@@ -1387,7 +1397,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1449,7 +1459,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1500,7 +1510,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1563,7 +1573,7 @@ SMODS.Joker {
 
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1618,7 +1628,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1719,7 +1729,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1774,7 +1784,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1782,7 +1792,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { chips = 0, chips_gain = 35 } },
+	config = { extra = { chips = 0, chips_gain = 30 } },
 
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.chips_gain } }
@@ -1829,7 +1839,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1877,7 +1887,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -1894,6 +1904,9 @@ SMODS.Joker {
 	end,
 
 	calculate = function(self, card, context)
+		if G.GAME.modifiers.znm_pyramid then
+			card.ability.extra.denominator = 2
+		end
 		if context.individual and context.cardarea == G.play and #G.jokers.cards + G.GAME.joker_buffer < G.jokers.config.card_limit and context.other_card:get_id() == 3
 			and SMODS.pseudorandom_probability(card, 'znm_pyramidscheme', card.ability.extra.numerator, card.ability.extra.denominator, 'znm_pyramidscheme') then
 			G.GAME.joker_buffer = G.GAME.joker_buffer + 1
@@ -1942,7 +1955,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2002,7 +2015,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2060,7 +2073,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2112,7 +2125,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2120,7 +2133,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { chips = 40, mult = 6, odds = 2 } },
+	config = { extra = { chips = 40, mult = 7, odds = 2 } },
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.chips, card.ability.extra.mult } }
 	end,
@@ -2163,7 +2176,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2216,7 +2229,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2224,7 +2237,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { mult = 0, mult_gain = 6 } },
+	config = { extra = { mult = 0, mult_gain = 5 } },
 
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.mult, card.ability.extra.mult_gain, localize((G.GAME.current_round.znm_liontamer_rank or {}).rank or 'Ace', 'ranks') } }
@@ -2288,7 +2301,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2419,7 +2432,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2489,11 +2502,12 @@ SMODS.Joker {
 		text = {
 			'If a {C:attention}consumable{} is held,',
 			'{C:attention}destroy{} a random consumable and give',
-			'a random card in poker hand an {C:dark_edition}Edition{}'
+			'a random card in poker hand an {C:dark_edition}Edition{}',
+			'when hand is played'
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2572,7 +2586,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2663,7 +2677,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2716,7 +2730,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2724,12 +2738,12 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 7,
 	-- put all variables in here
-	config = { extra = { dollars = 3 } },
+	config = { extra = { dollars = 3, hasshrimped = 0 } },
 
 	loc_vars = function(self, info_queue, card)
 		-- math.max is making sure it never displays as a negative number (this is possible by finding it with no other jokers)
 		-- its not possible anymore because i changed it !
-		return { vars = { card.ability.extra.dollars, math.max(card.ability.extra.dollars * (G.jokers and #G.jokers.cards or 0), 0) } }
+		return { vars = { card.ability.extra.dollars, math.max(card.ability.extra.dollars * ((G.jokers and #G.jokers.cards or 0) + card.ability.extra.hasshrimped), 0) } }
 	end,
 
 
@@ -2737,6 +2751,9 @@ SMODS.Joker {
 	calc_dollar_bonus = function(self, card)
 		local joker_tally = 0
 		for i = 1, #G.jokers.cards do
+			joker_tally = joker_tally + 1
+		end
+		if card.ability.extra.hasshrimped == 1 then
 			joker_tally = joker_tally + 1
 		end
 		return joker_tally > 0 and card.ability.extra.dollars * joker_tally or nil
@@ -2761,12 +2778,16 @@ SMODS.Joker {
 					func = function()
 						(context.blueprint_card or card):juice_up(0.8, 0.8)
 						joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						card.ability.extra.hasshrimped = 1
 						return true
 					end
 				}))
 				return { message = "Shrimps!" }
 			end
-			
+		end
+		if context.starting_shop then
+			--sets the extra value hackfix back to 0
+			card.ability.extra.hasshrimped = 0
 		end
 	end
 }
@@ -2777,6 +2798,7 @@ SMODS.Joker {
 	key = 'blueberries',
 	blueprint_compat = true,
 	eternal_compat = false,
+
 	perishable_compat = true,
 	-- loc text is the in game description
 	loc_txt = {
@@ -2784,13 +2806,13 @@ SMODS.Joker {
 		text = {
 			'Cards in poker hand are either',
 			'{C:attention}duplicated{} into your hand or {C:attention}destroyed{},',
-			'chosen at {C:attention}random{}, lasts {C:attention}3{} rounds',
+			'chosen at {C:attention}random{}, lasts {C:attention}#3#{} rounds',
 			'{C:inactive}({C:attention}#1#{C:inactive} rounds remaining){}',
 
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2798,10 +2820,10 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 4,
 	-- put all variables in here
-	config = { extra = { rounds = 3, odds = 2 } },
+	config = { extra = { rounds = 3, odds = 2, roundstotal = 3 } },
 
 	loc_vars = function(self, info_queue, card)
-		return { vars = { card.ability.extra.rounds, card.ability.extra.odds } }
+		return { vars = { card.ability.extra.rounds, card.ability.extra.odds, card.ability.extra.roundstotal } }
 	end,
 
 
@@ -2809,11 +2831,28 @@ SMODS.Joker {
 	calculate = function(self, card, context)
 		local znm_blueberryduplicatelist = {}
 		local znm_blueberrydestroylist = {}
+		-- this is for turnover of the century
+		if (G.GAME.modifiers.znm_foreverberry) and not card.ability.eternal then
+			self.eternal_compat = true
+			card:set_eternal(true)
+		end
+		if not (G.GAME.modifiers.znm_foreverberry) then
+			self.eternal_compat = false
+		end
 
 
 		if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
-			card.ability.extra.rounds = card.ability.extra.rounds - 1
-
+			--turnover of the century override code
+			if not ((G.GAME.modifiers.znm_foreverberry) and card.ability.extra.rounds == 3) then
+				card.ability.extra.rounds = card.ability.extra.rounds - 1
+			else
+				card.ability.extra.rounds = 914
+				card.ability.extra.roundstotal = 914
+				return {
+					message = '"Hello!"',
+					colour = G.C.SECONDARY_SET.Spectral
+				}
+			end
 			if card.ability.extra.rounds == 0 then
 				G.E_MANAGER:add_event(Event({
 					func = function()
@@ -2882,7 +2921,7 @@ SMODS.Joker {
 					G.hand:emplace(copy_card)
 					copy_card.states.visible = nil
 					-- this line is to make hologram and recycling bin work
-					playing_card_joker_effects({true})
+					playing_card_joker_effects({ true })
 					G.E_MANAGER:add_event(Event({
 						func = function()
 							copy_card:start_materialize()
@@ -2914,7 +2953,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -2925,6 +2964,7 @@ SMODS.Joker {
 	config = { extra = { fountain_threshold = 35 } },
 
 	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
 		return { vars = { card.ability.extra.fountain_threshold } }
 	end,
 
@@ -2963,7 +3003,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3009,7 +3049,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3080,7 +3120,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 1,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3151,13 +3191,13 @@ SMODS.Joker {
 	loc_txt = {
 		name = 'Stained Glass',
 		text = {
-			'Adds a {C:attention}Glass{} card',
+			'Adds a {C:attention}Glass{} card with an {C:dark_edition}Edition{}',
 			'to your deck when a',
 			'card with {C:diamonds}Diamond{} suit is {C:attention}destroyed{}'
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3169,6 +3209,9 @@ SMODS.Joker {
 
 	loc_vars = function(self, info_queue, card)
 		info_queue[#info_queue + 1] = G.P_CENTERS.m_glass
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
 		return {
 			vars = {
 				colours = {
@@ -3192,7 +3235,9 @@ SMODS.Joker {
 			-- run through the "create a glass card" loop once for each diamond card destroyed in that instance
 			if diamond_cards > 0 then
 				for i = 1, diamond_cards do
-					glass_card = SMODS.add_card { set = "Base", enhancement = "m_glass", area = G.deck }
+					local znm_glassedition = poll_edition('znm_stainedglass', nil, true, true,
+						{ 'e_polychrome', 'e_holo', 'e_foil' })
+					glass_card = SMODS.add_card { set = "Base", enhancement = "m_glass", edition = znm_glassedition, area = G.deck }
 					SMODS.calculate_context({ playing_card_added = true, cards = { glass_card } })
 				end
 			end
@@ -3217,7 +3262,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 3,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3266,7 +3311,7 @@ SMODS.Joker {
 		}
 	},
 	rarity = 2,
-	
+
 	-- Which atlas key to pull from.
 	atlas = 'ZucchinisVariousJokers',
 	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
@@ -3274,7 +3319,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 6,
 	-- put all variables in here
-	config = { extra = { xmult = 3, xmult_gain } },
+	config = { extra = { xmult = 3 } },
 
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.xmult, card.ability.extra.xmult_gain } }
@@ -3294,6 +3339,683 @@ SMODS.Joker {
 	end
 }
 
+SMODS.Joker {
+	key = 'pickuptwo',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Pickup 2',
+		text = {
+			'Gain {C:blue}+#1#{} hand if discard',
+			'contains a {C:attention}Wild Card{}',
+
+		}
+	},
+	rarity = 2,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 0, y = 5 },
+	-- Cost of card in shop.
+	cost = 7,
+	-- put all variables in here
+	config = { extra = { hands = 1, wildreq = 1 } },
+
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_wild
+		return { vars = { card.ability.extra.hands, card.ability.extra.wildreq } }
+	end,
+
+	in_pool = function(self, args) -- gating it silly style
+		for _, playing_card in ipairs(G.playing_cards or {}) do
+			if SMODS.has_enhancement(playing_card, 'm_wild') then
+				return true
+			end
+		end
+		return false
+	end,
+
+	calculate = function(self, card, context)
+		if context.discard and context.other_card == context.full_hand[#context.full_hand] then
+			local wild_cards = 0
+
+
+			for _, discarded_card in ipairs(context.full_hand) do
+				if (SMODS.has_enhancement(discarded_card, 'm_wild') and not discarded_card.debuff) then
+					wild_cards = wild_cards + 1
+				end
+			end
+
+			if wild_cards >= card.ability.extra.wildreq then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						ease_hands_played(card.ability.extra.hands)
+						SMODS.calculate_effect(
+							{ message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.hands } } },
+							context.blueprint_card or card)
+						colour = G.C.BLUE
+						return true
+					end
+				}))
+				return nil, true -- This is for Joker retrigger purposes
+			end
+		end
+	end
+}
+
+
+SMODS.Joker {
+	key = 'idolswap',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Idol Swap',
+		text = {
+			'This Joker gives {X:mult,C:white}X#1#{} Mult for',
+			'each {C:money}$1{} of {C:attention}sell value{} on the {C:attention}leftmost{} Joker,',
+			"then {C:attention}halves{} that Joker's sell value",
+			'{C:inactive,s:0.8}(Rounded down){}',
+			'{C:inactive}(Currently {X:mult,C:white}X#2#{C:inactive} Mult){}',
+			'{C:green,s:0.8}Concept by Tobyaaa{}'
+		}
+	},
+	rarity = 2,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 1, y = 5 },
+	-- Cost of card in shop.
+	cost = 7,
+	-- put all variables in here
+	config = { extra = { xmult = 1, tobyaaaxmult = 1 } },
+
+	loc_vars = function(self, info_queue, card)
+		if card.area and card.area == G.jokers then
+			return { vars = { card.ability.extra.xmult, card.ability.extra.xmult * G.jokers.cards[1].sell_cost } }
+		else
+			return { vars = { card.ability.extra.xmult, card.ability.extra.xmult } }
+		end
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.before and context.main_eval and not context.blueprint then
+			card.ability.extra.tobyaaaxmult = G.jokers.cards[1].sell_cost
+			G.jokers.cards[1].sell_cost = math.max(1, math.ceil(G.jokers.cards[1].sell_cost / 2))
+		end
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.tobyaaaxmult
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'ferrets',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Ferrets',
+		text = {
+			'{C:green}#1# in #2#{} chance to {C:attention}randomize{}',
+			'rank of each {C:attention{}discarded{} card',
+
+		}
+	},
+	rarity = 2,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 2, y = 5 },
+	-- Cost of card in shop.
+	cost = 7,
+	-- put all variables in here
+	config = { extra = { numerator = 1, denominator = 3 } },
+
+	loc_vars = function(self, info_queue, card)
+		local numerator, denominator = SMODS.get_probability_vars(card, card.ability.extra.numerator,
+			card.ability.extra.denominator, 'znm_ferrets') -- it is suggested to use an identifier so that effects that modify probabilities can target specific values
+		return { vars = { numerator, denominator, } }
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.discard and SMODS.pseudorandom_probability(card, 'znm_ferrets', card.ability.extra.numerator, card.ability.extra.denominator, 'znm_ferrets') then
+			local rank = pseudorandom_element(SMODS.Ranks, pseudoseed('znm_clicker'))
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					assert(SMODS.change_base(context.other_card, nil, rank.key))
+
+					return true
+				end
+			}))
+			return {
+				message = "!"
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'combinationlock',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Combination Lock',
+		text = {
+			'Earn {C:money}$#1#{} if ranks',
+			'in {C:attention}poker hand{} add up to',
+			'{C:attention}#2#{}, number changes each round',
+			'{C:inactive,s:0.8}(Number chosen between 20 and 35){}',
+			'{C:green,s:0.8}Concept by Bissy{}'
+		}
+	},
+	rarity = 1,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 3, y = 5 },
+	-- Cost of card in shop.
+	cost = 6,
+	-- put all variables in here
+	config = { extra = { dollars = 5 } },
+
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.dollars, (G.GAME.current_round.znm_combinationlocknum or 30) } }
+	end,
+
+
+
+	calculate = function(self, card, context)
+		local combinationbool = false
+		local nomnum = 0
+		if context.before and context.main_eval then
+			for _, v in pairs(context.scoring_hand) do
+				nomnum = nomnum + v.base.nominal
+			end
+			if nomnum == G.GAME.current_round.znm_combinationlocknum then
+				G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) + card.ability.extra.dollars
+				return {
+					dollars = card.ability.extra.dollars,
+					func = function() -- This is for timing purposes, it runs after the dollar manipulation
+						G.E_MANAGER:add_event(Event({
+							func = function()
+								G.GAME.dollar_buffer = 0
+								return true
+							end
+						}))
+					end
+				}
+			end
+		end
+	end
+}
+
+local function reset_znm_combinationlock_num()
+	--testing number
+	G.GAME.current_round.znm_combinationlocknum = 914
+	G.GAME.current_round.znm_combinationlocknum = pseudorandom('znm_combinationlock', 20, 35, G.GAME.round_resets.ante)
+end
+
+
+SMODS.Joker {
+	key = 'ouijaboard',
+	blueprint_compat = false,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Ouija Board',
+		text = {
+			'If played hand is a single',
+			'{C:attention}#1# of {V:1}#2#{},',
+			'add a {C:purple}Purple Seal{} to played card',
+			'{s:0.8}Card changes every round'
+
+
+		}
+	},
+	rarity = 3,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 4, y = 5 },
+	soul_pos = { x = 4, y = 6 },
+	-- Cost of card in shop.
+	cost = 8,
+	-- put all variables in here
+
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_SEALS['Purple']
+		local ob_card = G.GAME.current_round.znm_ouijaboard_card or { rank = 'Ace', suit = 'Spades' }
+		return { vars = { localize(ob_card.rank, 'ranks'), localize(ob_card.suit, 'suits_plural'), colours = { G.C.SUITS[ob_card.suit] } } }
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.before and context.main_eval and #context.full_hand == 1 and not context.blueprint and context.full_hand[1]:get_id() == G.GAME.current_round.znm_ouijaboard_card.id and
+			context.full_hand[1]:is_suit(G.GAME.current_round.znm_ouijaboard_card.suit) then
+			G.E_MANAGER:add_event(Event({
+				trigger = 'before',
+				delay = 0.1,
+				func = function()
+					context.full_hand[1]:set_seal('Purple', nil, true)
+					return true
+				end
+			}))
+		end
+	end
+}
+
+--function for setting the card idol style
+local function reset_znm_ouijaboard_card()
+	G.GAME.current_round.znm_ouijaboard_card = { rank = 'Ace', suit = 'Spades' }
+	local valid_ob_cards = {}
+	for _, playing_card in ipairs(G.playing_cards) do
+		if not SMODS.has_no_suit(playing_card) and not SMODS.has_no_rank(playing_card) then
+			valid_ob_cards[#valid_ob_cards + 1] = playing_card
+		end
+	end
+	local ob_card = pseudorandom_element(valid_ob_cards, 'znm_ouijaboard' .. G.GAME.round_resets.ante)
+	if ob_card then
+		G.GAME.current_round.znm_ouijaboard_card.rank = ob_card.base.value
+		G.GAME.current_round.znm_ouijaboard_card.suit = ob_card.base.suit
+		G.GAME.current_round.znm_ouijaboard_card.id = ob_card.base.id
+	end
+end
+
+SMODS.Joker {
+	key = 'norm',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Norm',
+		text = {
+			'Gain {C:blue}+#1#{} hands when {C:attention}Blind{} is selected',
+			'Earn no {C:attention}interest{}',
+		}
+	},
+	rarity = 2,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 5, y = 5 },
+	-- Cost of card in shop.
+	cost = 8,
+	-- put all variables in here
+	config = { extra = { hands = 2, is_changed = false } },
+
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.hands, card.ability.extra.xmult_gain } }
+	end,
+	add_to_deck = function(self, card, from_debuff)
+		if not G.GAME.modifiers.no_interest then
+			G.GAME.modifiers.no_interest = true
+			card.ability.extra.is_changed = true
+		end
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		if card.ability.extra.is_changed then
+			G.GAME.modifiers.no_interest = false
+		end
+	end,
+	calculate = function(self, card, context)
+		--burgelar joker ohhh you know
+		if context.setting_blind then
+			G.E_MANAGER:add_event(Event({
+				func = function()
+					ease_hands_played(card.ability.extra.hands)
+					SMODS.calculate_effect(
+						{ message = localize { type = 'variable', key = 'a_hands', vars = { card.ability.extra.hands } } },
+						context.blueprint_card or card)
+					return true
+				end
+			}))
+			return nil, true -- This is for Joker retrigger purposes
+		end
+	end
+
+}
+
+SMODS.Joker {
+	key = 'scrapbook',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Scrapbook',
+		text = {
+			'{C:mult}+#1#{} Mult for each {C:attention}Lucky Card{}',
+			'in your {C:attention}full deck{}',
+			'{C:inactive}(Currently {C:mult}+#2#{C:inactive} Mult){}',
+		}
+	},
+	rarity = 1,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 6, y = 5 },
+	-- Cost of card in shop.
+	cost = 4,
+	-- put all variables in here
+	config = { extra = { mult_gain = 4 } },
+
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.m_lucky
+
+		local lucky_tally = 0
+		if G.playing_cards then
+			for _, playing_card in ipairs(G.playing_cards) do
+				if SMODS.has_enhancement(playing_card, 'm_lucky') then lucky_tally = lucky_tally + 1 end
+			end
+		end
+		return { vars = { card.ability.extra.mult_gain, ((card.ability.extra.mult_gain * lucky_tally) or 0) } }
+	end,
+	in_pool = function(self, args) -- makes sure it won't appear if you have 0 lucky cards
+		for _, playing_card in ipairs(G.playing_cards or {}) do
+			if SMODS.has_enhancement(playing_card, 'm_lucky') then
+				return true
+			end
+		end
+		return false
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.joker_main then
+			local lucky_tally = 0
+			if G.playing_cards then
+				for _, playing_card in ipairs(G.playing_cards) do
+					if SMODS.has_enhancement(playing_card, 'm_lucky') then lucky_tally = lucky_tally + 1 end
+				end
+
+				return {
+					mult = card.ability.extra.mult_gain * lucky_tally
+				}
+			end
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'landfill',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Landfill',
+		text = {
+			'If no {C:attention}discards{} are remaining',
+			'and {C:money}$#1#{} or more is held,',
+			'gain {C:red}+1{} discard and lose {C:money}$#1#{}',
+			'{C:red}+#2#{} discard each round',
+			'{C:green,s:0.8}Concept by Bissy{}'
+		}
+	},
+	rarity = 3,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 7, y = 5 },
+	-- Cost of card in shop.
+	cost = 8,
+	-- put all variables in here
+	config = { extra = { discardcost = 5, discardsgained = 1 } },
+
+	loc_vars = function(self, info_queue, card)
+		return { vars = { card.ability.extra.discardcost, card.ability.extra.discardsgained } }
+	end,
+
+	add_to_deck = function(self, card, from_debuff)
+		G.GAME.round_resets.discards = G.GAME.round_resets.discards + card.ability.extra.discardsgained
+		ease_discard(card.ability.extra.discardsgained)
+	end,
+	remove_from_deck = function(self, card, from_debuff)
+		G.GAME.round_resets.discards = G.GAME.round_resets.discards - card.ability.extra.discardsgained
+		ease_discard(-card.ability.extra.discardsgained)
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if to_big(G.GAME.current_round.discards_left) == to_big(0) and to_big(G.GAME.dollars) >= to_big(card.ability.extra.discardcost) then
+			G.GAME.current_round.discards_left = G.GAME.current_round.discards_left + card.ability.extra.discardsgained
+			G.GAME.dollar_buffer = (G.GAME.dollar_buffer or 0) - card.ability.extra.discardcost
+			return {
+				dollars = -card.ability.extra.discardcost,
+				func = function() -- This is for timing purposes, it runs after the dollar manipulation
+					G.E_MANAGER:add_event(Event({
+						func = function()
+							G.GAME.dollar_buffer = 0
+							return true
+						end
+					}))
+				end
+			}
+		end
+	end
+}
+
+SMODS.Joker {
+	key = 'jokerpotion',
+	blueprint_compat = false,
+	eternal_compat = false,
+	perishable_compat = true,
+
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Joker Potion',
+		text = {
+			'When {C:attention}Blind{} is selected,',
+			'destroy a random {C:attention}Joker{} and',
+			'give a random {C:attention}Joker{} an {C:dark_edition}Edition{}',
+			'Lasts {C:attention}#1#{} rounds',
+			'{C:inactive}({C:attention}#2#{C:inactive} rounds remaining){}',
+
+		}
+	},
+	rarity = 2,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 8, y = 5 },
+	-- Cost of card in shop.
+	cost = 6,
+	-- put all variables in here
+	config = { extra = { rounds = 3, rounds_remaining = 3 } },
+
+	loc_vars = function(self, info_queue, card)
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
+		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
+		return { vars = { card.ability.extra.rounds, card.ability.extra.rounds_remaining } }
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.setting_blind and not context.blueprint then
+			local destructable_jokers = {}
+			for i = 1, #G.jokers.cards do
+				if G.jokers.cards[i] ~= card and not SMODS.is_eternal(G.jokers.cards[i], card) and not G.jokers.cards[i].getting_sliced then
+					destructable_jokers[#destructable_jokers + 1] =
+						G.jokers.cards[i]
+				end
+			end
+			local joker_to_destroy = pseudorandom_element(destructable_jokers, 'znm_jokerpotion')
+
+			if joker_to_destroy then
+				joker_to_destroy.getting_sliced = true
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						(context.blueprint_card or card):juice_up(0.8, 0.8)
+						joker_to_destroy:start_dissolve({ G.C.RED }, nil, 1.6)
+						return true
+					end
+				}))
+			end
+
+
+
+			local edition = poll_edition('znm_jokerpotion', nil, true, true,
+				{ 'e_polychrome', 'e_holo', 'e_foil', 'e_negative' })
+			local editionless_jokers = SMODS.Edition:get_edition_cards(G.jokers, true)
+			for i = 1, #editionless_jokers do
+				if editionless_jokers[i] == card or G.jokers.cards[i].getting_sliced then
+					table.remove(editionless_jokers, i)
+				end
+
+				local eligible_card = pseudorandom_element(editionless_jokers, 'znm_jokerpotion')
+				if eligible_card then
+					G.E_MANAGER:add_event(Event({
+						trigger = 'after',
+
+						func = function()
+							eligible_card:set_edition(edition, true)
+							return true
+						end
+					}))
+
+					return {
+						message = "Glurp!",
+						colour = G.C.EDITION
+					}
+				end
+			end
+		end
+
+
+		-- destroy after 3 rounds
+		if context.end_of_round and context.game_over == false and context.main_eval and not context.blueprint then
+			card.ability.extra.rounds_remaining = card.ability.extra.rounds_remaining - 1
+
+
+			if card.ability.extra.rounds_remaining == 0 then
+				G.E_MANAGER:add_event(Event({
+					func = function()
+						play_sound('tarot1')
+						card.T.r = -0.2
+						card:juice_up(0.3, 0.4)
+						card.states.drag.is = true
+						card.children.center.pinch.x = true
+						-- This part destroys the card.
+						G.E_MANAGER:add_event(Event({
+							trigger = 'after',
+							delay = 0.3,
+							blockable = false,
+							func = function()
+								G.jokers:remove_card(card)
+								card:remove()
+								card = nil
+								return true;
+							end
+						}))
+						return true
+					end
+				}))
+				return {
+					message = "Drank!",
+					colour = G.C.EDITION
+				}
+			end
+			return {
+				message = "-1",
+				colour = G.C.EDITION
+			}
+		end
+	end
+}
+
+-- abuffzucchini
+SMODS.Joker {
+	key = 'zucchini',
+	blueprint_compat = true,
+	eternal_compat = true,
+	perishable_compat = true,
+	discovered = true,
+	-- loc text is the in game description
+	loc_txt = {
+		name = 'Zucchini',
+		text = {
+			'This Joker gains {X:mult,C:white}X#2#{} Mult when',
+			'leftmost {C:attention}Joker{} triggers',
+			'{C:inactive}(Currently {X:mult,C:white}X#1# {C:inactive} Mult){}'
+
+		}
+	},
+	rarity = 4,
+
+	-- Which atlas key to pull from.
+	atlas = 'ZucchinisVariousJokers',
+	-- This card's position on the atlas, starting at {x=0,y=0} for the very top left.
+	pos = { x = 9, y = 5 },
+	soul_pos = { x = 9, y = 6 },
+	-- Cost of card in shop.
+	cost = 8,
+	-- put all variables in here
+	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
+
+	loc_vars = function(self, info_queue, card)
+		return { vars = { (card.ability.extra.xmult or 1), (card.ability.extra.xmult_gain or 0.1) } }
+	end,
+
+
+
+	calculate = function(self, card, context)
+		if context.post_trigger
+			and context.other_card.area == G.jokers and context.other_card == G.jokers.cards[1] and context.other_card ~= card and not context.blueprint then
+			card.ability.extra.xmult = card.ability.extra.xmult + card.ability.extra.xmult_gain
+
+			return {
+
+				card_eval_status_text(card, 'extra', nil, nil, nil, {
+					message = localize('k_upgrade_ex'),
+					colour = G.C.MULT
+				}),
+
+			}
+		end
+		if context.joker_main then
+			return {
+				xmult = card.ability.extra.xmult
+			}
+		end
+	end
+}
 
 
 
@@ -3308,4 +4030,6 @@ function SMODS.current_mod.reset_game_globals(run_start)
 	reset_znm_brokenrecord_rank() -- for Broken Record
 	reset_znm_liontamer_rank() -- for Lion Tamer
 	reset_znm_slothful_suit()  -- for Slothful Joker
+	reset_znm_ouijaboard_card()
+	reset_znm_combinationlock_num()
 end

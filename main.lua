@@ -1,5 +1,6 @@
 assert(SMODS.load_file("luafiles/ZucchiniJokers.lua"))()
 assert(SMODS.load_file("luafiles/ZucchiniDecks.lua"))()
+assert(SMODS.load_file("luafiles/ZucchiniChallenges.lua"))()
 
 
 

@@ -1,0 +1,15 @@
+Additions:
+- Added Pickup 2, Idol Swap, Ferrets, Combination Lock, Ouija Board, Norm, Scrapbook, Landfill, Joker Potion, and Zucchini
+- Added 10 new challenges! 
+
+Changes:
+- Coral Reef, Honeypot, and Fire Eater have all been nerfed by 1 mult each, they're still strong but I'm hoping this change makes them fun while not being able to stand on their own fully for too long
+- Mayhem joker has been buffed to +7 mult from +5, for a number of tiny reasons
+- Stained Glass has been buffed to give the created glass cards an Edition as well
+- Shrimps now gives the $3 from the joker it destroys if it successfully destroys a joker, since previously it was pretty misleading about how much money it actually gave
+- Éalú gains 30 chips instead of 35
+- Pinhead gives 40 chips instead of 35
+- 50-ball is now Uncommon
+- Fixed Recycling Bin not giving multiple instances of money when multiple cards are added at a time (for example from Familiar)
+- Fixed Crazy 8s incorrectly checking for other wild cards before deciding which card to make wild
+- Minor description tweaks for a few jokers, including The Fountain and Shaman
