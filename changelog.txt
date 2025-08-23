@@ -1,3 +1,16 @@
+1.1.1
+
+Changes:
+- Idol Swap now properly removes extra sell value added by Jokers such as Gift Card and Egg
+- Reworked Joker Potion and fixed a bunch of weird bugs with it in the process (this is a pretty significant buff and I'm interested in feedback but I think at the very least it's worth taking now whereas previously you never really have a reason to take it)
+- Landfill now only costs $4 to discard instead of $5, which should make it more worth taking. This is a vibes based thing and I don't really have much of a base for it besides that, if people think this is crazy strong now I'll probably change it back
+- Food jokers (Joker Potion, Blueberries, Aw Shucks, and Cotton Candy) are now in a food pool which should at the very least be paperback compatible :)
+
+
+
+
+1.1.0
+
 Additions:
 - Added Pickup 2, Idol Swap, Ferrets, Combination Lock, Ouija Board, Norm, Scrapbook, Landfill, Joker Potion, and Zucchini
 - Added 10 new challenges! 

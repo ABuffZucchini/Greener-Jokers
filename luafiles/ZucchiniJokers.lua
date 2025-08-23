@@ -936,6 +936,10 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.slots, card.ability.extra.invis_rounds } }
 	end,
+		--for use with stuff like paperback's jokers that depend on food jokers
+	pools = {
+    Food = true
+	},
 	-- gives and takes joker slots when card is added and removed
 	add_to_deck = function(self, card, from_debuff)
 		G.jokers.config.card_limit = G.jokers.config.card_limit + card.ability.extra.slots
@@ -1641,6 +1645,10 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.consumables_limit } }
 	end,
+		--for use with stuff like paperback's jokers that depend on food jokers
+	pools = {
+    Food = true
+	},
 
 	add_to_deck = function(self, card, from_debuff)
 		G.E_MANAGER:add_event(Event({
@@ -2825,7 +2833,10 @@ SMODS.Joker {
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.rounds, card.ability.extra.odds, card.ability.extra.roundstotal } }
 	end,
-
+	--for use with stuff like paperback's jokers that depend on food jokers
+	pools = {
+    Food = true
+	},
 
 
 	calculate = function(self, card, context)
@@ -3450,6 +3461,7 @@ SMODS.Joker {
 		if context.before and context.main_eval and not context.blueprint then
 			card.ability.extra.tobyaaaxmult = G.jokers.cards[1].sell_cost
 			G.jokers.cards[1].sell_cost = math.max(1, math.ceil(G.jokers.cards[1].sell_cost / 2))
+			G.jokers.cards[1].ability.extra_value = math.max(1, math.floor(G.jokers.cards[1].ability.extra_value / 2))
 		end
 		if context.joker_main then
 			return {
@@ -3792,7 +3804,7 @@ SMODS.Joker {
 	-- Cost of card in shop.
 	cost = 8,
 	-- put all variables in here
-	config = { extra = { discardcost = 5, discardsgained = 1 } },
+	config = { extra = { discardcost = 4, discardsgained = 1 } },
 
 	loc_vars = function(self, info_queue, card)
 		return { vars = { card.ability.extra.discardcost, card.ability.extra.discardsgained } }
@@ -3838,9 +3850,9 @@ SMODS.Joker {
 	loc_txt = {
 		name = 'Joker Potion',
 		text = {
-			'When {C:attention}Blind{} is selected,',
+			'When {C:attention}Blind{} is selected',
 			'destroy a random {C:attention}Joker{} and',
-			'give a random {C:attention}Joker{} an {C:dark_edition}Edition{}',
+			'make a random {C:attention}Joker{} {C:dark_edition}Polychrome{}',
 			'Lasts {C:attention}#1#{} rounds',
 			'{C:inactive}({C:attention}#2#{C:inactive} rounds remaining){}',
 
@@ -3858,12 +3870,12 @@ SMODS.Joker {
 	config = { extra = { rounds = 3, rounds_remaining = 3 } },
 
 	loc_vars = function(self, info_queue, card)
-		info_queue[#info_queue + 1] = G.P_CENTERS.e_foil
-		info_queue[#info_queue + 1] = G.P_CENTERS.e_holo
 		info_queue[#info_queue + 1] = G.P_CENTERS.e_polychrome
-		info_queue[#info_queue + 1] = G.P_CENTERS.e_negative
 		return { vars = { card.ability.extra.rounds, card.ability.extra.rounds_remaining } }
 	end,
+	pools = {
+    Food = true
+	},
 
 
 
@@ -3891,15 +3903,16 @@ SMODS.Joker {
 
 
 
-			local edition = poll_edition('znm_jokerpotion', nil, true, true,
-				{ 'e_polychrome', 'e_holo', 'e_foil', 'e_negative' })
+			local edition = 'e_polychrome'
 			local editionless_jokers = SMODS.Edition:get_edition_cards(G.jokers, true)
-			for i = 1, #editionless_jokers do
-				if editionless_jokers[i] == card or G.jokers.cards[i].getting_sliced then
-					table.remove(editionless_jokers, i)
+			better_editionless_jokers= {}
+			for i = #editionless_jokers, 1, -1 do
+				if editionless_jokers[i] ~= card and not G.jokers.cards[i].getting_sliced then
+				better_editionless_jokers[#better_editionless_jokers + 1] = editionless_jokers[i]
 				end
+			end
 
-				local eligible_card = pseudorandom_element(editionless_jokers, 'znm_jokerpotion')
+				local eligible_card = pseudorandom_element(better_editionless_jokers, 'znm_jokerpotion')
 				if eligible_card then
 					G.E_MANAGER:add_event(Event({
 						trigger = 'after',
@@ -3915,7 +3928,7 @@ SMODS.Joker {
 						colour = G.C.EDITION
 					}
 				end
-			end
+			
 		end
 
 
@@ -3960,6 +3973,27 @@ SMODS.Joker {
 	end
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 -- abuffzucchini
 SMODS.Joker {
 	key = 'zucchini',
@@ -3985,7 +4019,7 @@ SMODS.Joker {
 	pos = { x = 9, y = 5 },
 	soul_pos = { x = 9, y = 6 },
 	-- Cost of card in shop.
-	cost = 8,
+	cost = 20,
 	-- put all variables in here
 	config = { extra = { xmult = 1, xmult_gain = 0.1 } },
 
