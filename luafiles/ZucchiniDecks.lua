@@ -62,19 +62,19 @@ SMODS.Back {
         name = 'Birthday Deck',
         text = {
             '{C:attention}+#1#{} voucher slot',
-            'Start run with {C:money,T:v_clearance_sale}#2#{}',
+           
 
 
         }
     },
     pos = { x = 2, y = 0 },
     atlas = 'ZucchinisVariousDecks',
-    config = { voucher = 'v_clearance_sale', extra = { voucherslots = 1 } },
+    config = { extra = { voucherslots = 1 } },
     loc_vars = function(self, info_queue, back)
         return {
-            vars = { self.config.extra.voucherslots, localize { type = 'name_text', key = self.config.voucher, set = 'Voucher' }
+            vars = { self.config.extra.voucherslots }
             }
-        }
+        
     end,
     apply = function(self, back)
         SMODS.change_voucher_limit(self.config.extra.voucherslots)
@@ -248,7 +248,7 @@ SMODS.Back {
                         }))
                         return {
                             card_eval_status_text(joker_to_destroy, 'extra', nil, nil, nil, {
-                                message = "!!",
+                                message = "Hot!",
                                 colour = G.C.ATTENTION
                             }),
                         }
@@ -256,7 +256,7 @@ SMODS.Back {
                         joker_to_destroy:set_eternal(false)
                         return {
                             card_eval_status_text(joker_to_destroy, 'extra', nil, nil, nil, {
-                                message = "!!",
+                                message = "Hot!",
                                 colour = G.C.RED
                             }),
                         }

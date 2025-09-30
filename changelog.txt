@@ -1,3 +1,22 @@
+1.2.0
+
+Additions:
+Added Light Switch, Gnome, High Striker, Comet, Fun Guy, Grand Canyon, Carnival Cannon, Boss Sauce, Missing Poster, Minesweeper, Paranoid Joker, Hungry Hungry Jimbos, Operation, Watering Can, and Railroad! These Jokers mostly serve to fix up issues that Greener Jokers created with early-game balancing, and a lack of proper immediate scoring jokers. This also brings the Joker count to 75! That's half the number of Jokers in vanilla Balatro
+
+Changes:
+Ouija Board has been moved to uncommon
+Candle has been reworked, it's pretty much identical besides excluding flushes from the list of valid hands and probably working a bit differently with modded hands
+Plastic Bag has been nerfed a bit
+Sackboy is strong and I like it that way! However for some unbelievable reason it costs $4? So it costs $6 now
+Scrapbook has been buffed to +5 mult per lucky card and moved to uncommon
+Crazy 8s has been reworked to assign wild to a card held in hand to make it hopefully less clunky, it's also been changed to actually be compatible with blueprint because it wasn't actually compatible even though it said it was for some reason
+Fixed a Step Ladder bug with reordering cards (thanks base4!)
+Birthday Deck no longer starts with Clearance Sale
+peninsula upgrade color changed to red because its mult
+Cotton Candy and Aw Shucks have had their descriptions changed to say round instead of rounds remaining when there's only 1 round left. this is the greatest achievement in modding history 
+
+
+
 1.1.1
 
 Changes:
