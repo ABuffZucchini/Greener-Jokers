@@ -1,3 +1,9 @@
+1.3.3
+
+Changes:
+Lollipop has been reworked a bit to work nicely in higher stakes and have a bit more strategy
+Missing Poster is a dollar cheaper to hopefully trick people into using it more
+
 1.3.2
 
 Changes:
